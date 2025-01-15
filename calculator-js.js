@@ -44,9 +44,9 @@ const buttons = document.querySelectorAll('.button'); //references every element
 const display = document.querySelector('.display-entry'); //references element with "display-entry" class
 
 //define the logic to update the display when any calculator button is pressed
-let operator = null;
 let currentInput = '';
-let runningTotal = '';
+let operator = null;
+let runningTotal = null;
 
 const updateDisplay = function(button) {
     const buttonValue = button.textContent;
@@ -64,23 +64,31 @@ const updateDisplay = function(button) {
             if (runningTotal === null) {
                 runningTotal = parseFloat(currentInput);
             } else if (operator) {
-                runningTotal = operate(operator, runningTotal, currentInput);
+                runningTotal = operate(operator, runningTotal, parseFloat(currentInput));
             }
-
-            currentInput = '';
-            operator = buttonValue;
         }
+        
+        operator = buttonValue;
+        currentInput = '';
+        display.textContent = runningTotal;
             
     /*If the input is the = sign:
         This means we have a runningTotal value, an operator set, and a non-blank currentInput value
     */   
     } else if (buttonValue === '=') {
-        if (runningTotal && operator && currentInput !== null) {
+        if (runningTotal && operator !== null & currentInput !== '') {
             runningTotal = operate(operator, runningTotal, parseFloat(currentInput));
             display.textContent = runningTotal;
             currentInput = '';
             operator = null;
         }
+
+
+    } else if (buttonValue === 'C') {
+        currentInput = '';
+        operator = null;
+        runningTotal = null;
+        display.textContent = '';
     }
 };
 
