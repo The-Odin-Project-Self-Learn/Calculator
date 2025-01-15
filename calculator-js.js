@@ -1,3 +1,5 @@
+/*SET UP HELPER FUNCTIONS + GLOBAL VARIABLES*/
+
 //define arithmetic functions
 const addFunction = function(num1, num2) {
     return num1 + num2;
@@ -31,20 +33,59 @@ const operate = function(operator, num1, num2) {
     }
 }
 
-let firstNumber = null;
-let secondNumber = null;
-let operator = null;
 
 
-/*UPDATE DISPLAY*/
+
+
+/*PERFORM CALCULATIONS AND UPDATE DISPLAY*/
 
 //obtain references to the button and display elements
-const buttons = document.querySelectorAll('.button'); //references every div with "button" class
-const display = document.querySelector('.display-entry'); //references display <p> element with "display-entry" class
+const buttons = document.querySelectorAll('.button'); //references every element with "button" class
+const display = document.querySelector('.display-entry'); //references element with "display-entry" class
 
-//apply a function to each of the calculators' buttons
+//define the logic to update the display when any calculator button is pressed
+let operator = null;
+let currentInput = '';
+let runningTotal = '';
+
+const updateDisplay = function(button) {
+    const buttonValue = button.textContent;
+    
+    //if the input is a number, add it to an ongoing string
+    if (!isNaN(buttonValue)) {
+        currentInput += buttonValue;
+        display.textContent = currentInput;
+    
+    /*if the input is an operator:
+        
+    */
+    } else if (['+', '-', '*', '/'].includes(buttonValue)) {
+        if (currentInput) {
+            if (runningTotal === null) {
+                runningTotal = parseFloat(currentInput);
+            } else if (operator) {
+                runningTotal = operate(operator, runningTotal, currentInput);
+            }
+
+            currentInput = '';
+            operator = buttonValue;
+        }
+            
+    /*If the input is the = sign:
+        This means we have a runningTotal value, an operator set, and a non-blank currentInput value
+    */   
+    } else if (buttonValue === '=') {
+        if (runningTotal && operator && currentInput !== null) {
+            runningTotal = operate(operator, runningTotal, parseFloat(currentInput));
+            display.textContent = runningTotal;
+            currentInput = '';
+            operator = null;
+        }
+    }
+};
+
+//apply an event listener to each of the calculators' buttons
 buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-
-    });
+    button.addEventListener('click', () => updateDisplay(button));
 });
+

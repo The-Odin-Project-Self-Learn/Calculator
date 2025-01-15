@@ -24,15 +24,11 @@ p {
 
 .display {
     height: 15%;
-    background-color: rgb(28, 13, 60);
+    background-color: rgb(19, 6, 46);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.display-entry {
-
 }
 
 .row-container {
