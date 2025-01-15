@@ -56,8 +56,12 @@ const updateDisplay = function(button) {
         currentInput += buttonValue;
         display.textContent = currentInput;
     
-    /*if the input is an operator:
-        
+    /*if the input is an operator, update the running total, the operator, and reset the input:
+        if we've only typed in one number thus far, this number is the new running total, and we
+        set the operator
+
+        if our operator is set, we already have a number typed, so we update the running total to be
+        the operation between this newly inputted number and the previous running total
     */
     } else if (['+', '-', '*', '/'].includes(buttonValue)) {
         if (currentInput) {
@@ -73,7 +77,9 @@ const updateDisplay = function(button) {
         display.textContent = runningTotal;
             
     /*If the input is the = sign:
-        This means we have a runningTotal value, an operator set, and a non-blank currentInput value
+        This means we have a runningTotal value, an operator set, and a non-blank currentInput value,
+        since the currentInput value is equivalent to the last ongoing number String before the =
+        operator was pressed
     */   
     } else if (buttonValue === '=') {
         if (runningTotal && operator !== null & currentInput !== '') {
@@ -83,7 +89,7 @@ const updateDisplay = function(button) {
             operator = null;
         }
 
-
+    //to clear, reset all variables and the display
     } else if (buttonValue === 'C') {
         currentInput = '';
         operator = null;
